@@ -14,6 +14,10 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+    - name: Install Git Large Files
+      run: |
+        sudo apt-get install git-lfs
+        git lfs install
     - name: Set up Python 3.8.4
       uses: actions/setup-python@v2
       with:
