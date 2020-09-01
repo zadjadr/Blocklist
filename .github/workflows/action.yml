@@ -1,0 +1,35 @@
+name: Autoupdating blocklist.txt
+
+on:
+  schedule:
+    - cron: "0 0 */14 * *"
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python 3.8.4
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.8.4
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+    - name: Run script
+      run: |
+        python ./update.py
+    - name: Commit changes
+      run: |
+        git config --global user.name "Xcalizorz"
+        git config --global user.email "Xcalizorz@users.noreply.github.com"
+        git commit -am "Auto updating"
+    - name: Push changes
+      run: |
+        git push
