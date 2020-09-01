@@ -1,6 +1,6 @@
 from pathlib import Path
 from typing import Any, List
-from urllib.request import urlopen, HTTPError
+from urllib.request import urlopen, HTTPError, URLError
 
 
 class FileReader:
@@ -45,10 +45,14 @@ class BlocklistUpdater:
 
     def _request_data(self, blocklist: List[str]) -> List[str]:
         for url in blocklist.copy():
-            try:            
+            try:
                 self._append_to_adlists(url)
             except HTTPError:
                 print(f"Error at {url}\n")
+                self.bad_url_found = True
+                blocklist.remove(url)
+            except URLError:
+                print(f"Connection refused by {url}\n")
                 self.bad_url_found = True
                 blocklist.remove(url)
         return blocklist
