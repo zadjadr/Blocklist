@@ -28,11 +28,9 @@ class FileWriter:
 
 class BlocklistUpdater:
     def __init__(self, reader: FileReader = FileReader(), writer: FileWriter = FileWriter()):
-        self.bad_url_found = False
         self.reader = reader
         self.writer = writer
         self.adlists = "adlists.list"
-        self.hostlist = set()
 
     def update(self, filename: str) -> None:
         self.writer.create_empty_file(self.adlists)
@@ -49,14 +47,12 @@ class BlocklistUpdater:
                 self._append_to_adlists(url)
             except HTTPError:
                 print(f"Error at {url}\n")
-                self.bad_url_found = True
                 blocklist.remove(url)
             except URLError:
                 print(f"Connection refused by {url}\n")
-                self.bad_url_found = True
                 blocklist.remove(url)
         return blocklist
-
+    
     def _append_to_adlists(self, url: str) -> None:
         with urlopen(url) as response:
             self.writer.write(
