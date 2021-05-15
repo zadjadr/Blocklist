@@ -2,7 +2,7 @@ name: Autoupdating blocklist.txt
 
 on:
   schedule:
-    - cron: "0 0 */14 * *"
+    - cron: "0 0 1 */3 *"
   push:
     branches:
       - master
