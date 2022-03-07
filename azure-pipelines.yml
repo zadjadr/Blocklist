@@ -9,18 +9,14 @@ trigger:
 pool:
   vmImage: ubuntu-latest
 
-
 steps:
 - task: UsePythonVersion@0
   inputs:
     versionSpec: '3.7'
   displayName: 'Use Python 3.7'
 
-- script: |
-    python -m pip install --upgrade pip
-    pip install -r requirements.txt
-  displayName: 'Install dependencies'
-
-- script: |
-     python ./update.py
+- task: PythonScript@0
+  inputs:
+    scriptSource: 'filePath'
+    scriptPath: 'update.py'
   displayName: 'test'
